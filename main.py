@@ -15,7 +15,7 @@ def option_list():
 
 def take_input():
     option_list()
-    pick = input('Please enter the number of the option you would like to pick, or enter 0 to quit')
+    pick = input('Please enter the number of the option you would like to pick, or enter 0 to quit\n')
 
     return pick
 
@@ -45,7 +45,7 @@ def validate_input():
     elif choice == 0:
         return 0
     else:
-        print('You have not entered a valid number, please choose one of the options above, or enter 0 to quit.\n')
+        print('You have not entered a valid number, please choose one of the options above, or enter 0 to quit.')
     
 
 def script():
