@@ -31,19 +31,18 @@ def validate_input():
 
     if choice == 1:
        
-        return 1 
+        return choice
 
     elif choice == 2:
     
-        return 2
+        return choice
 
     elif choice == 3:
-        return 3
+        return choice
 
     elif choice == 0:
-        return 0
-    else:
-        print('You have not entered a valid number, please choose one of the options above, or enter 0 to quit.')
+        return choice
+    
     
 
 def script():
@@ -64,7 +63,7 @@ def script():
             continue
 
         elif choice == 3:
-            print(f'You have chosen {choice}, the hasing tools')
+            print(f'You have chosen {choice}, the hashing tools')
             continue
 
         
@@ -74,6 +73,7 @@ def script():
             continue
 
         else:
+            print('Please enter a valid number')
             continue
 
 
