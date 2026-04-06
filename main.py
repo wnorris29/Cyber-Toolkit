@@ -1,6 +1,8 @@
 
 
 import pyfiglet
+from utils.display import clear
+
 
 
 
@@ -50,30 +52,38 @@ def script():
     print_banner()
 
     while True:
+        
         choice = validate_input()
+        clear()
 
         if choice == 0:
+            print("Thanks for using me, Goodbye!")
             break
         elif choice == 1:
-             print(f'You have chosen {choice}, the password tools')
+             print(f'You have chosen {choice}, the password tools\n')
+        
              continue
 
         elif choice == 2:
-            print(f'You have chosen {choice}, the port scanner')
+            print(f'You have chosen {choice}, the port scanner\n')
+            
             continue
 
         elif choice == 3:
-            print(f'You have chosen {choice}, the hashing tools')
+            print(f'You have chosen {choice}, the hashing tools\n')
+            
             continue
 
         
 
         elif choice == 'error':
-            print('please enter a number')
+            print('please enter a number\n')
+        
             continue
 
         else:
-            print('Please enter a valid number')
+            print('Please enter a valid number\n')
+
             continue
 
 
