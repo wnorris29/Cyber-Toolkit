@@ -11,11 +11,11 @@ def print_banner():
 
 
 def option_list():
-    print("Here are your options:\n1: Password Tools\n2: Port scanner\n3: Hashing Tools")
+    print("\nHere are your options:\n1: Password Tools\n2: Port scanner\n3: Hashing Tools")
 
 def take_input():
     option_list()
-    pick = input('Please enter the number of the option you would like to pick, or enter 0 to quit\n')
+    pick = input('Please enter the number of the option you would like to pick, or enter 0 to quit \n')
 
     return pick
 
@@ -27,19 +27,17 @@ def validate_input():
         choice = int(inpt)
 
     except:
-        print('please enter a number')
         return 'error'
 
     if choice == 1:
-        print(f'You have chosen {inpt}, the password tools')
+       
         return 1 
 
     elif choice == 2:
-        print(f'You have chosen {inpt}, the port scanner')
+    
         return 2
 
     elif choice == 3:
-        print(f'You have chosen {inpt}, the hashing tools')
         return 3
 
     elif choice == 0:
@@ -57,8 +55,22 @@ def script():
 
         if choice == 0:
             break
+        elif choice == 1:
+             print(f'You have chosen {choice}, the password tools')
+             continue
+
+        elif choice == 2:
+            print(f'You have chosen {choice}, the port scanner')
+            continue
+
+        elif choice == 3:
+            print(f'You have chosen {choice}, the hasing tools')
+            continue
+
+        
 
         elif choice == 'error':
+            print('please enter a number')
             continue
 
         else:
