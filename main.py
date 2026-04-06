@@ -11,7 +11,7 @@ def print_banner():
 
 
 def option_list():
-    print("Here are your options:\n1: Password Tools\n2: Port scanner\n3:Hashing Tools")
+    print("Here are your options:\n1: Password Tools\n2: Port scanner\n3: Hashing Tools")
 
 def take_input():
     option_list()
@@ -45,7 +45,7 @@ def validate_input():
     elif choice == 0:
         return 0
     else:
-        print('You have not entered a valid number, please choose one of the options above, or enter 0 to quit.')
+        print('You have not entered a valid number, please choose one of the options above, or enter 0 to quit.\n')
     
 
 def script():
