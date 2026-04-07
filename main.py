@@ -3,6 +3,7 @@
 import pyfiglet
 from utils.display import clear
 from tools.hash_tools import hash_menu
+from tools.password_tools import password_menu
 
 
 
@@ -63,7 +64,7 @@ def script():
         elif choice == 1:
              print(f'You have chosen {choice}, the password tools\n')
         
-             continue
+             password_menu()
 
         elif choice == 2:
             print(f'You have chosen {choice}, the port scanner\n')
