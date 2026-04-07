@@ -39,7 +39,6 @@ def handle_input():
             choice = int(chosen)
 
         except:
-            print('Please enter a number')
             return 'error'
 
         if choice == 1:
@@ -94,6 +93,9 @@ def generate_password():
 
         elif char_pool_to_add1 ==4:
             char_pool += string.punctuation
+
+        else:
+            print('Enter a valid number')
             
 
     
