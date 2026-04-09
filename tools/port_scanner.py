@@ -122,26 +122,40 @@ def custom_scan(host):
     
 
     
-    if port_1 > port_2:
+
+    
+    
+
+    run_custom_scan(host, port_1, port_2)
+
+
+
+
+def run_custom_scan(host, port1,port2):
+      
+    if port1 > port2:
         print('The first number should be lower then the second number')
         return 'error'
 
-    if port_1 <=0 or port_2 <=0:
+    if port1 <=0 or port2 <=0:
         print('There is no port 0!')
         return 'error'
 
     
 
     
-    if port_2 > 65535:
+    if port2 > 65535:
         print('Port is invalid!')
         return 'error'
     
-    port_2 +=1
+    port2 +=1
     
     
-    ports = range(port_1, port_2)
+    ports = range(port1, port2)
     run_scan(host, ports)
+
+    
+
 
 
 

@@ -2,10 +2,10 @@
 
 import pyfiglet
 from utils.display import clear
-from tools.hash_tools import hash_menu
-from tools.password_tools import password_menu
-from tools.port_scanner import scan_menu
-
+from tools.hash_tools import hash_menu, hash_string, hash_file, compare_hashes
+from tools.password_tools import password_menu, generate_password, rate_password
+from tools.port_scanner import scan_menu, full_scan, custom_scan,popular_scan,run_custom_scan
+import argparse
 
 
 def print_banner():
@@ -89,9 +89,58 @@ def script():
             continue
 
 
+def parse_args():
+    parser = argparse.ArgumentParser(description='Cyber Toolkit')
+
+    parser.add_argument('--scan', choices = ['full', 'popular', 'custom'])
+    parser.add_argument('--host', type=str)
+    parser.add_argument('--port-range', nargs= 2, type=int)
+    parser.add_argument('--hash', choices=['string', 'file','compare'])
+    parser.add_argument('--pwd', choices=['generate', 'rate'])
+    args = parser.parse_args()
+
+    return args
+
 
 if __name__ == '__main__':
-    script()
+    args = parse_args()
+    if any(vars(args).values()):
+        
+        if args.scan:
+            if not args.host:
+                print('Host argument invalid')
+                quit()
+            elif args.scan == 'full':
+                full_scan(args.host)
+            elif args.scan =='popular':
+                popular_scan(args.host)
+            elif args.scan =='custom':
+                if not args.port_range:
+                    print('Port range argument invalid')
+                    quit()
+                else:
+                    run_custom_scan(args.host,args.port_range[0],args.port_range[1])
+
+        if args.hash:
+            if args.hash =='string':
+               result =  hash_string()
+               print(result)
+            elif args.hash =='file':
+                result = hash_file()
+                print(result)
+            elif args.hash == 'compare':
+                result = compare_hashes()
+        if args.pwd:
+            if args.pwd == 'generate':
+                generate_password()
+            elif args.pwd == 'rate':
+                rate_password()
+
+
+
+
+    else:
+        script()
 
 
 
