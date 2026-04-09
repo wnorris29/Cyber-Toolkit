@@ -17,7 +17,7 @@ def handle_input():
     try:
         choice = int(inpt)
 
-    except:
+    except ValueError:
         return 'error'
     
     if choice == 1:
@@ -69,7 +69,7 @@ def pick_algorithm():
         try:
             choice = int(alg_choice)
 
-        except:
+        except ValueError:
             print('Please enter a number')
             continue
 
@@ -134,7 +134,7 @@ def hash_file():
             return post_file
 
 
-    except:
+    except FileNotFoundError:
         print('There was an error')
 
 

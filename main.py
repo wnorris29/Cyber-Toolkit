@@ -30,7 +30,7 @@ def validate_input():
     try:
         choice = int(inpt)
 
-    except:
+    except ValueError:
         return 'error'
 
     if choice == 1:

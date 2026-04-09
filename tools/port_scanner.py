@@ -14,7 +14,7 @@ def take_input():
     try:
         scan_type1 = int(scan_type)
 
-    except:
+    except ValueError:
         return 'error'
     
     if scan_type1 == 1:
@@ -116,7 +116,7 @@ def custom_scan(host):
         port_1 = int(port1)
         port_2 = int(port2)
 
-    except:
+    except ValueError:
         return 'error'
     
     

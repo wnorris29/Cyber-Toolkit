@@ -38,7 +38,7 @@ def handle_input():
         try:
             choice = int(chosen)
 
-        except:
+        except ValueError:
             return 'error'
 
         if choice == 1:
@@ -61,7 +61,7 @@ def generate_password():
     try:
         length1 = int(length)
 
-    except:
+    except ValueError:
         print('please enter a number')
         return 'error'
     
@@ -76,7 +76,7 @@ def generate_password():
         try:
             char_pool_to_add1 = int(char_pool_to_add)
 
-        except:
+        except ValueError:
             print('Please enter a a number')
             return 'error'
         
