@@ -1,4 +1,6 @@
 import whois
+from rich.table import Table
+from utils.display import console
 
 
 def whois_menu():
@@ -47,6 +49,13 @@ def whois_lookup(domain):
 
     result = whois.whois(domain)
 
+    table = Table(title="Whois Results")
+
+    table.add_column("Field", style="green")
+    table.add_column("Value", style="cyan")
+
+    
+
 
     date = result.creation_date
 
@@ -65,45 +74,13 @@ def whois_lookup(domain):
          date = date[0]
 
 
-    if result.org:
-         print(f'Organisation: {result.org}')
-    else:
-         print('Organisation: Not available')
+    table.add_row("Organisation", str(result.org) if result.org else "Unavailable")
+    table.add_row("Domain name", str(domain_name) if result.domain_name else "Unavailable")
+    table.add_row("Registrar", str(result.registrar) if result.registrar else "Unavailable")
+    table.add_row("Creation date", str(date.strftime("%Y-%m-%d")) if result.creation_date else "Unavailable")
+    table.add_row("Expiration Date", str(exp_date.strftime("%Y-%m-%d"))if result.expiration_date else "Unavailable")
+    table.add_row("Country", str(result.country) if result.country else "Unavailable")
+    table.add_row("Name Servers", ','.join(result.name_servers) if result.name_servers else "Unavailable")
 
-    if result.domain_name:
-         print(f'Domain Name: {domain_name}')
-
-    else:
-         print('Domain Name: Unavailable')
-
-    if result.registrar:
-         print(f'Registrar: {result.registrar}')
-
-    else:
-         print('Registrar: Unavailable')
-
-    if result.creation_date:
-         print(f'Creation Date: {date.strftime("%Y-%m-%d")}')
-
-    else:
-         print('Creation Date: Unavailable')
-
-    if result.expiration_date:
-         print(f'Expiration Date: {exp_date.strftime("%Y-%m-%d")}')
-
-    else:
-         print('Expiration Date: Unavailable')
-
-    if result.country:
-         print(f'Country: {result.country}')
-
-    else:
-         print('Country: Unavailable')
-
-    if result.name_servers:
-         print(f'Name Servers: {", ".join(result.name_servers)}')
-
-    else:
-         print('Name Servers: Unavailable')
-
+    console.print(table)
 

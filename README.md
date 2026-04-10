@@ -47,7 +47,6 @@ please note for the hash and password arguments this will be used as normal afte
 ## Planned Features
 
 - GUI front end 
-- WHOIS lookup 
 - DNS Enumeration
 - VirusTotal Integration
 - phishing analyser
