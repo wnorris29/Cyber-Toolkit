@@ -1,5 +1,12 @@
 import secrets
 import string
+from utils.display import console
+
+from rich.table import Table
+from rich.panel import Panel
+
+
+
 def password_menu():
     
   
@@ -114,35 +121,65 @@ def generate_password():
 
 def rate_password():
 
+    criteria = {
+    'Length (8+)': False,
+    'Lowercase': False,
+    'Uppercase': False,
+    'Numbers': False,
+    'Special Characters': False
+}
+
     pwd = input('Enter the password you would like to rate.\n')
     score = 0
+
+    table = Table(title='Password Rating')
+    
+
+    table.add_column('Criteria', style= 'green')
+    table.add_column('Met?', style = 'cyan')
+
 
     if len(pwd) >8:
         score +=1
 
+        criteria['Length (8+)'] = True
     if any(c in string.ascii_lowercase for c in pwd):
         score+=1
+        criteria['Lowercase'] = True
+        
 
     if any(c in string.ascii_uppercase for c in pwd):
         score +=1
+        criteria['Uppercase'] = True
 
     if any(c in string.digits for c in pwd):
         score+=1
+        criteria['Numbers'] = True
 
     if any(c in string.punctuation for c in pwd):
         score+=1
+        criteria['Special Characters'] = True
+
+
+    for criterion, passed in criteria.items():
+        table.add_row(criterion, "✓" if passed else "✗")
 
     if score == 1 or score == 2:
-        print('Your password is weak')
+        border_style = "Red"
+
 
     elif score == 3 or score == 4:
-        print('Your password is moderate')
+        border_style = "Yellow"
 
     elif score == 5:
-        print('Your password is strong')
+        border_style = "Green"
 
     elif score ==0 :
-        print('Your password is very weak!!')
+        border_style = "bold red"
+
+    console.print(Panel(table, border_style = border_style, subtitle = f'Score: {score}/5'))
+
+
 
     
 
