@@ -1,21 +1,26 @@
-
-
+from utils.display import console
+from rich.text import Text
+from rich.panel import Panel
 import pyfiglet
 from utils.display import clear
 from tools.hash_tools import hash_menu, hash_string, hash_file, compare_hashes
 from tools.password_tools import password_menu, generate_password, rate_password
 from tools.port_scanner import scan_menu, full_scan, custom_scan,popular_scan,run_custom_scan
+from recon.whois_lookup import whois_menu
 import argparse
 
 
 def print_banner():
-    banner = pyfiglet.figlet_format("Cyber Toolkit")
+    banner = pyfiglet.figlet_format("Cyber Toolkit", font='slant')
+    text = Text(banner)
+    text.stylize("bold cyan")
+    text.stylize('magenta', 0, len(banner)//2)
 
-    print(banner)
+    console.print(Panel(text))
 
 
 def option_list():
-    print("\nHere are your options:\n1: Password Tools\n2: Port scanner\n3: Hashing Tools")
+    print("\nHere are your options:\n1: Password Tools\n2: Port scanner\n3: Hashing Tools\n4: WhoIS LookUp")
 
 def take_input():
     option_list()
@@ -42,6 +47,8 @@ def validate_input():
         return choice
 
     elif choice == 3:
+        return choice
+    elif choice ==4:
         return choice
 
     elif choice == 0:
@@ -75,6 +82,10 @@ def script():
             print(f'You have chosen {choice}, the hashing tools\n')
             
             hash_menu()
+
+        elif choice ==4:
+            print(f'You have chosen {choice} WhoIsLookup ')
+            whois_menu()
 
         
 

@@ -1,4 +1,27 @@
 import socket 
+from utils.display import console
+from rich.table import Table
+
+
+
+
+services = {
+    21: 'FTP',
+    22: 'SSH',
+    23: 'Telnet',
+    25: 'SMTP',
+    53: 'DNS',
+    80: 'HTTP',
+    110: 'POP3',
+    143: 'IMAP',
+    443: 'HTTPS',
+    445: 'SMB',
+    3306: 'MySQL',
+    3389: 'RDP',
+    8080: 'HTTP Alternate'
+}
+
+
 
 def port_scanner_menu():
     print('Please choose a type of scan to conduct:\n1: Full Scan\n2: Popular Scan\n3: Custom Scan or type 0 to exit to main menu')
@@ -75,16 +98,32 @@ def scan_port(host, port):
 
 def run_scan(host, ports):
 
+    console.print("Scan started...", style = 'bold green')
+
     total = 0
+
+    table = Table(title= "Scan Results")
+
+    table.add_column("Port", style="cyan")
+    table.add_column("Status", style="green")
+    table.add_column("Service", style="magenta")
+
 
     for port in ports:
         is_open = scan_port(host, port)
 
         if is_open == True:
-            print(f'Port number {port} is open')
             total +=1
 
-    print(f'There was {total} ports open')
+            table.add_row(str(port), "open", services.get(port, "Unknown") )
+
+    console.print(table)
+
+    if total > 0:
+
+        console.print(f'There was {total} ports open', style='bold green')
+    else:
+        console.print('No open ports found', style='bold red')
 
 
 def get_host():
