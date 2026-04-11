@@ -5,7 +5,7 @@ from utils.display import console
 
 def whois_menu():
 
-    print('Welcome to the WhoIS Lookup tool! Would you like to:\n0: Exit to main menu\n1: WhoIs Lookup')
+    console.print('Welcome to the WhoIS Lookup tool! Would you like to:\n0: Exit to main menu\n1: WhoIs Lookup')
 
     while True:
          
@@ -16,18 +16,18 @@ def whois_menu():
 
          except ValueError:
               
-              print('Enter a number')
+              console.print('Enter a number')
               continue
          
          if choice1 == 0:
-              print('Exiting...')
+              console.print('Exiting...')
               break
          elif choice1 == 1:
               domain = get_domain()
               whois_lookup(domain)
               
          else:
-              print('Enter a valid number')
+              console.print('Enter a valid number')
 
 
 

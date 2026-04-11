@@ -1,7 +1,8 @@
 import hashlib
+from utils.display import console
 
 def hash_option_list():
-    print('Please pick one of the following:\n0: Return to main menu\n1: Hash a string\n2: Hash a file\n3: compare two hashes.')
+    console.print('Please pick one of the following:\n0: Return to main menu\n1: Hash a string\n2: Hash a file\n3: compare two hashes.')
 
 def take_input():
     hash_option_list()
@@ -39,28 +40,28 @@ def hash_menu():
         choice = handle_input()
 
         if choice == 1:
-            print('You have chosen to hash a string')
-            print(hash_string())
+            console.print('You have chosen to hash a string')
+            console.print(hash_string())
         elif choice == 2:
-            print('You have chosen to hash a file')
-            print(hash_file())
+            console.print('You have chosen to hash a file')
+            console.print(hash_file())
 
         elif choice == 3:
-            print('You have chosen to compare two hashes')
+            console.print('You have chosen to compare two hashes')
             compare_hashes()
 
         elif choice == 0:
-            print('Exiting to main menu...')
+            console.print('Exiting to main menu...')
             break
 
         elif choice == 'invalid':
-            print('Please enter a valid number')
+            console.print('Please enter a valid number')
             continue
 
 
 def pick_algorithm():
 
-    print('Here are your algorithm choices:\n1: md5\n2: sha1\n3:sha256\n')
+    console.print('Here are your algorithm choices:\n1: md5\n2: sha1\n3:sha256\n')
 
     
 
@@ -70,20 +71,20 @@ def pick_algorithm():
             choice = int(alg_choice)
 
         except ValueError:
-            print('Please enter a number')
+            console.print('Please enter a number')
             continue
 
         if choice == 1:
-            print('You have picked md5')
+            console.print('You have picked md5')
             return 'md5'
         elif choice == 2:
-            print('You have picked sha1')
+            console.print('You have picked sha1')
             return 'sha1'
         elif choice == 3:
-            print('You have picked sha256')
+            console.print('You have picked sha256')
             return 'sha256'
         else:
-            print('Enter a valid number')
+            console.print('Enter a valid number')
             continue
 
 
@@ -135,7 +136,7 @@ def hash_file():
 
 
     except FileNotFoundError:
-        print('There was an error')
+        console.print('There was an error')
 
 
 def compare_hashes():
@@ -153,7 +154,7 @@ def compare_hashes():
        unknown_hash = hash_string()
 
     else:
-        print('Enter a valid choice')
+        console.print('Enter a valid choice')
         return 'error'
     
 
@@ -162,10 +163,10 @@ def compare_hashes():
       
 
     if unknown_hash == known_hash:
-            print('They match')
+            console.print('They match')
 
     else:
-            print('They do not')
+            console.print('They do not')
 
 
 

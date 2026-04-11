@@ -24,7 +24,7 @@ services = {
 
 
 def port_scanner_menu():
-    print('Please choose a type of scan to conduct:\n1: Full Scan\n2: Popular Scan\n3: Custom Scan or type 0 to exit to main menu')
+    console.print('Please choose a type of scan to conduct:\n1: Full Scan\n2: Popular Scan\n3: Custom Scan or type 0 to exit to main menu')
 
 
 
@@ -59,26 +59,26 @@ def scan_menu():
         choice = take_input()
 
         if choice == 1:
-            print('You have chosen a full scan')
+            console.print('You have chosen a full scan')
             host = get_host()
             full_scan(host)
         elif choice == 2:
-            print('You have chosen a popular scan')
+            console.print('You have chosen a popular scan')
             host = get_host()
             popular_scan(host)
         elif choice == 3:
-            print('You have chosen a custom scan')
+            console.print('You have chosen a custom scan')
             host = get_host()
             custom_scan(host)
 
         elif choice == 0:
-            print('Exiting...')
+            console.print('Exiting...')
             break
         elif choice == 'invalid':
-            print('Please enter a valid number')
+            console.print('Please enter a valid number')
             continue
         elif choice == 'error':
-            print('There was an error')
+            console.print('There was an error')
             continue
 
 
@@ -173,18 +173,18 @@ def custom_scan(host):
 def run_custom_scan(host, port1,port2):
       
     if port1 > port2:
-        print('The first number should be lower then the second number')
+        console.print('The first number should be lower then the second number')
         return 'error'
 
     if port1 <=0 or port2 <=0:
-        print('There is no port 0!')
+        console.print('There is no port 0!')
         return 'error'
 
     
 
     
     if port2 > 65535:
-        print('Port is invalid!')
+        console.print('Port is invalid!')
         return 'error'
     
     port2 +=1

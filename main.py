@@ -6,7 +6,7 @@ from utils.display import clear
 from tools.hash_tools import hash_menu, hash_string, hash_file, compare_hashes
 from tools.password_tools import password_menu, generate_password, rate_password
 from tools.port_scanner import scan_menu, full_scan, custom_scan,popular_scan,run_custom_scan
-from recon.whois_lookup import whois_menu
+from recon.whois_lookup import whois_menu,whois_lookup
 import argparse
 
 
@@ -20,7 +20,7 @@ def print_banner():
 
 
 def option_list():
-    print("\nHere are your options:\n1: Password Tools\n2: Port scanner\n3: Hashing Tools\n4: WhoIS LookUp")
+    console.print("\nHere are your options:\n1: Password Tools\n2: Port scanner\n3: Hashing Tools\n4: WhoIS LookUp")
 
 def take_input():
     option_list()
@@ -53,6 +53,8 @@ def validate_input():
 
     elif choice == 0:
         return choice
+    else:
+        return 'invalid'
     
     
 
@@ -66,36 +68,39 @@ def script():
         clear()
 
         if choice == 0:
-            print("Thanks for using me, Goodbye!")
+            console.print("Thanks for using me, Goodbye!")
             break
         elif choice == 1:
-             print(f'You have chosen {choice}, the password tools\n')
+             console.print(f'You have chosen {choice}, the password tools\n')
         
              password_menu()
 
         elif choice == 2:
-            print(f'You have chosen {choice}, the port scanner\n')
+            console.print(f'You have chosen {choice}, the port scanner\n')
             
             scan_menu()
 
         elif choice == 3:
-            print(f'You have chosen {choice}, the hashing tools\n')
+            console.print(f'You have chosen {choice}, the hashing tools\n')
             
             hash_menu()
 
         elif choice ==4:
-            print(f'You have chosen {choice} WhoIsLookup ')
+            console.print(f'You have chosen {choice} WhoIsLookup ')
             whois_menu()
 
         
 
         elif choice == 'error':
-            print('please enter a number\n')
+            console.print('please enter a number\n')
         
+            continue
+        elif choice == 'invalid':
+            console.print('Please enter a valid number')
             continue
 
         else:
-            print('Please enter a valid number\n')
+            console.print('Please enter a valid number\n')
 
             continue
 
@@ -108,6 +113,7 @@ def parse_args():
     parser.add_argument('--port-range', nargs= 2, type=int)
     parser.add_argument('--hash', choices=['string', 'file','compare'])
     parser.add_argument('--pwd', choices=['generate', 'rate'])
+    parser.add_argument('--whois',type= str )
     args = parser.parse_args()
 
     return args
@@ -119,7 +125,7 @@ if __name__ == '__main__':
         
         if args.scan:
             if not args.host:
-                print('Host argument invalid')
+                console.print('Host argument invalid')
                 quit()
             elif args.scan == 'full':
                 full_scan(args.host)
@@ -127,7 +133,7 @@ if __name__ == '__main__':
                 popular_scan(args.host)
             elif args.scan =='custom':
                 if not args.port_range:
-                    print('Port range argument invalid')
+                    console.print('Port range argument invalid')
                     quit()
                 else:
                     run_custom_scan(args.host,args.port_range[0],args.port_range[1])
@@ -135,10 +141,10 @@ if __name__ == '__main__':
         if args.hash:
             if args.hash =='string':
                result =  hash_string()
-               print(result)
+               console.print(result)
             elif args.hash =='file':
                 result = hash_file()
-                print(result)
+                console.print(result)
             elif args.hash == 'compare':
                 result = compare_hashes()
         if args.pwd:
@@ -146,6 +152,10 @@ if __name__ == '__main__':
                 generate_password()
             elif args.pwd == 'rate':
                 rate_password()
+        if args.whois:
+            whois_lookup(args.whois)
+            
+
 
 
 

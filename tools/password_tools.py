@@ -13,24 +13,24 @@ def password_menu():
 
     while True:
         
-        print('Would you like to: \n0: Return to menu \n1: Generate a password\n2: Rate a password.')
+        console.print('Would you like to: \n0: Return to menu \n1: Generate a password\n2: Rate a password.')
 
         chosen = handle_input()
 
         if chosen == 1:
-            print('You have chosen to generate a password')
+            console.print('You have chosen to generate a password')
             generate_password()
         elif chosen == 2:
-            print('You have chosen to rate a password')
+            console.print('You have chosen to rate a password')
             rate_password()
         elif chosen == 0:
-            print('Returning to main menu...')
+            console.print('Returning to main menu...')
             break
         elif chosen == 'error':
-            print("please enter a number")
+            console.print("please enter a number")
 
         elif chosen == 'invalid':
-            print('Please enter a valid number')
+            console.print('Please enter a valid number')
 
     
 
@@ -69,7 +69,7 @@ def generate_password():
         length1 = int(length)
 
     except ValueError:
-        print('please enter a number')
+        console.print('please enter a number')
         return 'error'
     
     char_pool = []
@@ -84,7 +84,7 @@ def generate_password():
             char_pool_to_add1 = int(char_pool_to_add)
 
         except ValueError:
-            print('Please enter a a number')
+            console.print('Please enter a a number')
             return 'error'
         
         if char_pool_to_add1 == 1:
@@ -102,18 +102,18 @@ def generate_password():
             char_pool += string.punctuation
 
         else:
-            print('Enter a valid number')
+            console.print('Enter a valid number')
             
 
     
     if len(char_pool) == 0:
-        print('You have not selected anything! Please try again')
+        console.print('You have not selected anything! Please try again')
         return 'empty'
     
     for pools in range(length1):
         pwd += secrets.choice(char_pool)
 
-    print(pwd)
+    console.print(pwd)
     return pwd
 
 
