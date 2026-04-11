@@ -1,6 +1,7 @@
 import whois
 from rich.table import Table
 from utils.display import console
+from utils.helpers import get_domain
 
 
 def whois_menu():
@@ -37,13 +38,7 @@ def whois_menu():
 
 
 
-def get_domain():
 
-
-
-    domain = input('Enter a domain to lookup\n')
-
-    return domain
     
 def whois_lookup(domain):
 

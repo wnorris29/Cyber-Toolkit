@@ -3,6 +3,7 @@ from utils.display import console
 from rich.table import Table
 from concurrent.futures import ThreadPoolExecutor
 import time
+from utils.helpers import get_host
 
 
 
@@ -137,11 +138,7 @@ def run_scan(host, ports):
         console.print('No open ports found', style='bold red')
 
 
-def get_host():
 
-    host = input('Enter the IP address you would like to scan\n')
-
-    return host
 
 
 def full_scan(host):

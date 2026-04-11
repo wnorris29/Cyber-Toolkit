@@ -7,6 +7,7 @@ from tools.hash_tools import hash_menu, hash_string, hash_file, compare_hashes
 from tools.password_tools import password_menu, generate_password, rate_password
 from tools.port_scanner import scan_menu, full_scan, custom_scan,popular_scan,run_custom_scan
 from recon.whois_lookup import whois_menu,whois_lookup
+from recon.dns_enum import dns_menu
 import argparse
 
 
@@ -20,7 +21,7 @@ def print_banner():
 
 
 def option_list():
-    console.print("\nHere are your options:\n1: Password Tools\n2: Port scanner\n3: Hashing Tools\n4: WhoIS LookUp")
+    console.print("\nHere are your options:\n1: Password Tools\n2: Port scanner\n3: Hashing Tools\n4: WhoIS LookUp\n5: DNS Enemuration")
 
 def take_input():
     option_list()
@@ -49,6 +50,8 @@ def validate_input():
     elif choice == 3:
         return choice
     elif choice ==4:
+        return choice
+    elif choice ==5:
         return choice
 
     elif choice == 0:
@@ -88,6 +91,11 @@ def script():
         elif choice ==4:
             console.print(f'You have chosen {choice} WhoIsLookup ')
             whois_menu()
+        elif choice == 5:
+            console.print(f'You have chosen {choice}, dns enumeration')
+            dns_menu()
+            
+
 
         
 
