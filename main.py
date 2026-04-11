@@ -9,6 +9,7 @@ from tools.port_scanner import scan_menu, full_scan, custom_scan,popular_scan,ru
 from recon.whois_lookup import whois_menu,whois_lookup
 from recon.dns_enum import dns_menu
 import argparse
+from tools.virustotal import vt_menu
 
 
 def print_banner():
@@ -21,7 +22,7 @@ def print_banner():
 
 
 def option_list():
-    console.print("\nHere are your options:\n1: Password Tools\n2: Port scanner\n3: Hashing Tools\n4: WhoIS LookUp\n5: DNS Enemuration")
+    console.print("\nHere are your options:\n1: Password Tools\n2: Port scanner\n3: Hashing Tools\n4: WhoIS LookUp\n5: DNS Enemuration\n6: Scan URL")
 
 def take_input():
     option_list()
@@ -52,6 +53,8 @@ def validate_input():
     elif choice ==4:
         return choice
     elif choice ==5:
+        return choice
+    elif choice == 6:
         return choice
 
     elif choice == 0:
@@ -94,6 +97,11 @@ def script():
         elif choice == 5:
             console.print(f'You have chosen {choice}, dns enumeration')
             dns_menu()
+
+        elif choice ==6:
+            console.print(f'You have chosen {choice}, scan URL')
+            vt_menu()
+            
             
 
 

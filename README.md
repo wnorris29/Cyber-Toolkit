@@ -18,6 +18,8 @@ Python Project acting as a cybersecurity toolkit, goal is to develop and consoli
 
 - multithreading for more performant scans
 
+- Virus Total URL scanning
+
 
 
 ## Installation 
@@ -57,7 +59,6 @@ please note for the hash and password arguments this will be used as normal afte
 ## Planned Features
 
 - GUI front end 
-- VirusTotal Integration
 - phishing analyser
 - log parser
 
