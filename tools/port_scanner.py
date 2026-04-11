@@ -1,7 +1,8 @@
 import socket 
 from utils.display import console
 from rich.table import Table
-
+from concurrent.futures import ThreadPoolExecutor
+import time
 
 
 
@@ -98,6 +99,11 @@ def scan_port(host, port):
 
 def run_scan(host, ports):
 
+    
+
+    def scan_single(port):
+        return scan_port(host, port)
+
     console.print("Scan started...", style = 'bold green')
 
     total = 0
@@ -108,16 +114,21 @@ def run_scan(host, ports):
     table.add_column("Status", style="green")
     table.add_column("Service", style="magenta")
 
+    start = time.time()
+    with ThreadPoolExecutor(max_workers=500) as executor:
+        results = executor.map(scan_single, ports)
 
-    for port in ports:
-        is_open = scan_port(host, port)
 
-        if is_open == True:
-            total +=1
+    for port, is_open in zip(ports, results):
+        if is_open:
+            table.add_row(str(port), "open", services.get(port, "Unknown"))
+            total+=1
+    elapsed = time.time() - start
 
-            table.add_row(str(port), "open", services.get(port, "Unknown") )
 
+    
     console.print(table)
+    console.print(f'Scan completed in {elapsed:.2f} seconds')
 
     if total > 0:
 
