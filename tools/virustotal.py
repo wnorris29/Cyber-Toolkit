@@ -77,4 +77,6 @@ def scan_url(url, api_key):
     except requests.exceptions.RequestException:
         console.print('Network Error - check your connection', style='bold red')
 
+    return malicious
+
 

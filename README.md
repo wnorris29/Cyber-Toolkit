@@ -20,6 +20,8 @@ Python Project acting as a cybersecurity toolkit, goal is to develop and consoli
 
 - Virus Total URL scanning
 
+- phishing analyser that outputs a risk score
+
 
 
 ## Installation 
@@ -59,7 +61,6 @@ please note for the hash and password arguments this will be used as normal afte
 ## Planned Features
 
 - GUI front end 
-- phishing analyser
 - log parser
 
 

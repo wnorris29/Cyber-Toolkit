@@ -10,6 +10,7 @@ from recon.whois_lookup import whois_menu,whois_lookup
 from recon.dns_enum import dns_menu
 import argparse
 from tools.virustotal import vt_menu
+from tools.phishing_analyser import phishing_menu
 
 
 def print_banner():
@@ -22,7 +23,7 @@ def print_banner():
 
 
 def option_list():
-    console.print("\nHere are your options:\n1: Password Tools\n2: Port scanner\n3: Hashing Tools\n4: WhoIS LookUp\n5: DNS Enemuration\n6: Scan URL")
+    console.print("\nHere are your options:\n1: Password Tools\n2: Port scanner\n3: Hashing Tools\n4: WhoIS LookUp\n5: DNS Enemuration\n6: Scan URL\n7: Analyse potential phishing")
 
 def take_input():
     option_list()
@@ -55,6 +56,8 @@ def validate_input():
     elif choice ==5:
         return choice
     elif choice == 6:
+        return choice
+    elif choice == 7:
         return choice
 
     elif choice == 0:
@@ -101,6 +104,9 @@ def script():
         elif choice ==6:
             console.print(f'You have chosen {choice}, scan URL')
             vt_menu()
+        elif choice ==7:
+            console.print(f'You have chosen{choice}, phishing analysis')
+            phishing_menu()
             
             
 
