@@ -10,6 +10,16 @@ Python Project acting as a cybersecurity toolkit, goal is to develop and consoli
 
 - portscanner which can conduct full, popular and custom scans 
 
+- WHois lookup 
+
+- DNS enumeration
+
+- rich formatting
+
+- multithreading for more performant scans
+
+
+
 ## Installation 
 clone the repo using the following:
 
@@ -47,7 +57,6 @@ please note for the hash and password arguments this will be used as normal afte
 ## Planned Features
 
 - GUI front end 
-- DNS Enumeration
 - VirusTotal Integration
 - phishing analyser
 - log parser
