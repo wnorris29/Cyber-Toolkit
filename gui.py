@@ -1,5 +1,7 @@
 import customtkinter as tk
 import hashlib
+import threading
+from tools.port_scanner import scan_port
 
 def show_frame(frame):
     frame.tkraise()
@@ -39,6 +41,69 @@ def run_hash():
     hashing_output.delete("1.0", "end")
     hashing_output.insert("1.0", result)
 
+
+
+
+
+
+
+def on_scan_mode_change(value):
+    if value == "Custom":
+        scanner_range1.grid()
+        scanner_range2.grid()
+
+    else:
+        scanner_range1.grid_remove()
+        scanner_range2.grid_remove()
+
+
+
+
+def run_scan_gui():
+
+    host = scanner_input.get()
+    mode = scan_mode.get()
+
+
+    if not host:
+        return
+    
+
+    scanner_output.delete("1.0", "end")
+
+
+    def scan_thread():
+        if mode == "Popular":
+            ports = [21,22,23,25,53,80,110,143,443,445,3306,3389,8080]
+        elif mode == "Full":
+            ports = range(1,65536)
+        elif mode == "Custom":
+            try:
+                port1 = int(scanner_range1.get())
+                port2 = int(scanner_range2.get())
+                ports = range(port1, port2 + 1)
+
+            except ValueError:
+                app.after(0, lambda: scanner_output.insert("end", "Invalid port range\n"))
+                return
+            
+        for port in ports:
+            is_open = scan_port(host, port)
+
+            if is_open:
+                app.after(0, lambda p = port: scanner_output.insert("end", f"port {p} is open\n"))
+        app.after(0, lambda: scanner_output.insert("end", "Scan complete\n"))
+            
+
+    thread = threading.Thread(target=scan_thread)
+    thread.daemon = True
+    thread.start()
+
+
+
+
+
+
 app = tk.CTk()
 app.title("Cyber Toolkit")
 app.geometry("900x600")
@@ -74,6 +139,34 @@ hashing_frame.grid_columnconfigure(0, weight=1)
 
 
 
+scanner_frame = tk.CTkFrame(main_panel)
+scanner_frame.grid(row=0, column=0,  sticky = "nsew")
+scan_mode = tk.CTkSegmentedButton(scanner_frame, values = ["Popular", "Full", "Custom"], command=on_scan_mode_change)
+scan_mode.set("Popular")
+scan_mode.grid(row = 2, column = 0, pady=5, padx = 20, sticky = "w")
+
+scanner_label = tk.CTkLabel(scanner_frame, text="Enter the target IP Here")
+scanner_label.grid(row = 0, column = 1, sticky = "w")
+
+
+
+scanner_input = tk.CTkEntry(scanner_frame, width = 400, placeholder_text="Enter the IP Address you would like to scan")
+scanner_input.grid(row = 1, column = 1, sticky = "w")
+
+
+scanner_range1 = tk.CTkEntry(scanner_frame, placeholder_text="Start port")
+scanner_range1.grid(row = 3, column = 1, sticky = "w")
+scanner_range1.grid_remove()
+scanner_range2 = tk.CTkEntry(scanner_frame, placeholder_text="End Port")
+scanner_range2.grid(row = 3, column = 2, sticky = "w")
+scanner_range2.grid_remove()
+
+scanner_button = tk.CTkButton(scanner_frame, text="Run scan", command = run_scan_gui)
+scanner_button.grid(row = 4, column = 1, sticky = "w" )
+
+
+scanner_output = tk.CTkTextbox(scanner_frame)
+scanner_output.grid(row = 5, column = 1, sticky = "w")
 
 
 
@@ -89,7 +182,7 @@ tools = [
 ]
 
 tk.CTkButton(sidebar, text="Passwords", command=lambda: None).pack(pady=5, padx=10, fill="x")
-tk.CTkButton(sidebar, text="Port Scanner", command=lambda: None).pack(pady=5, padx=10, fill="x")
+tk.CTkButton(sidebar, text="Port Scanner", command=lambda: show_frame(scanner_frame)).pack(pady=5, padx=10, fill="x")
 tk.CTkButton(sidebar, text="Hashing", command=lambda: show_frame(hashing_frame)).pack(pady=5, padx=10, fill="x")
 tk.CTkButton(sidebar, text="WHOIS", command=lambda: None).pack(pady=5, padx=10, fill="x")
 tk.CTkButton(sidebar, text="DNS", command=lambda: None).pack(pady=5, padx=10, fill="x")
