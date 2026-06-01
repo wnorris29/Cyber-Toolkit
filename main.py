@@ -11,6 +11,7 @@ from recon.dns_enum import dns_menu
 import argparse
 from tools.virustotal import vt_menu
 from tools.phishing_analyser import phishing_menu
+from tools.log_parser import log_menu
 
 
 def print_banner():
@@ -23,7 +24,7 @@ def print_banner():
 
 
 def option_list():
-    console.print("\nHere are your options:\n1: Password Tools\n2: Port scanner\n3: Hashing Tools\n4: WhoIS LookUp\n5: DNS Enemuration\n6: Scan URL\n7: Analyse potential phishing")
+    console.print("\nHere are your options:\n1: Password Tools\n2: Port scanner\n3: Hashing Tools\n4: WhoIS LookUp\n5: DNS Enemuration\n6: Scan URL\n7: Analyse potential phishing\n8: Log Parser")
 
 def take_input():
     option_list()
@@ -58,6 +59,8 @@ def validate_input():
     elif choice == 6:
         return choice
     elif choice == 7:
+        return choice
+    elif choice ==8:
         return choice
 
     elif choice == 0:
@@ -107,6 +110,8 @@ def script():
         elif choice ==7:
             console.print(f'You have chosen{choice}, phishing analysis')
             phishing_menu()
+        elif choice ==8:
+            log_menu()
             
             
 
@@ -184,6 +189,9 @@ if __name__ == '__main__':
 
     else:
         script()
+
+
+
 
 
 

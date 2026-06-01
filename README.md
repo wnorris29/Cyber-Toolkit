@@ -22,6 +22,8 @@ Python Project acting as a cybersecurity toolkit, goal is to develop and consoli
 
 - phishing analyser that outputs a risk score
 
+ - log parser which identifies patterns and outputs a risk score
+
 
 
 ## Installation 
@@ -61,6 +63,6 @@ please note for the hash and password arguments this will be used as normal afte
 ## Planned Features
 
 - GUI front end 
-- log parser
+
 
 
