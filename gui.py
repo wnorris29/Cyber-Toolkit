@@ -11,6 +11,7 @@ import time
 from tools.phishing_analyser import heuristic_check, domain_age_check, redirect_check, calculate_risk
 from urllib.parse import urlparse
 from tools.virustotal import scan_url
+from tools.log_parser import parse_log
 
 load_dotenv()
 api_key = os.getenv('VT_API_KEY')
@@ -284,6 +285,33 @@ def run_phishing():
 
 
 
+def run_log_parser():
+    file = log_input.get()
+
+    if not file:
+        return
+    log_output.delete('1.0', 'end')
+
+    def log_thread():
+        try:
+            findings = parse_log(file)
+
+            if not findings:
+                app.after(0,lambda:log_output.insert('end','No suspicious activity found'))
+
+            else:
+                for finding in findings:
+                    output = f'line {finding['line']} | IP: {finding['ip']} | {finding['pattern']} | Risk: {finding['risk']}\n'
+                    app.after(0, lambda o=output: log_output.insert('end', o))
+
+        except Exception as e:
+            app.after(0, lambda:log_output.insert('end',f'Error {str(e)} while parsing!'))
+    thread = threading.Thread(target=log_thread)
+    thread.daemon = True
+    thread.start()
+
+
+
 
 
 
@@ -429,6 +457,22 @@ phishing_output = tk.CTkTextbox(phishing_frame)
 phishing_output.grid(row = 3, column=1,sticky='w')
 
 
+log_frame = tk.CTkFrame(main_panel)
+log_frame.grid(row=0,column=0,sticky='nsew')
+
+log_label = tk.CTkLabel(log_frame, text='Enter a filepath')
+log_label.grid(row=0, column =1, sticky = 'w')
+
+log_input = tk.CTkEntry(log_frame, placeholder_text="Enter a filepath")
+log_input.grid(row =1, column = 1, sticky = 'w')
+
+log_button = tk.CTkButton(log_frame, text='Parse log', command=lambda:run_log_parser())
+log_button.grid(row = 2, column =1, sticky = 'w')
+
+log_output = tk.CTkTextbox(log_frame)
+log_output.grid(row = 3, column = 1, sticky = 'w')
+
+
 tools = [
     "Passwords",
     "Port Scanner",
@@ -447,7 +491,7 @@ tk.CTkButton(sidebar, text="WHOIS", command=lambda: show_frame(whois_frame)).pac
 tk.CTkButton(sidebar, text="DNS", command=lambda: show_frame(dns_frame)).pack(pady=5, padx=10, fill="x")
 tk.CTkButton(sidebar, text="VirusTotal", command=lambda: show_frame(vt_frame)).pack(pady=5, padx=10, fill="x")
 tk.CTkButton(sidebar, text="Phishing", command=lambda: show_frame(phishing_frame)).pack(pady=5, padx=10, fill="x")
-tk.CTkButton(sidebar, text="Log Parser", command=lambda: None).pack(pady=5, padx=10, fill="x")
+tk.CTkButton(sidebar, text="Log Parser", command=lambda: show_frame(log_frame)).pack(pady=5, padx=10, fill="x")
 
 
 
