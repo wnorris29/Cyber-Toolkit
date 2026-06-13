@@ -8,6 +8,9 @@ from dotenv import load_dotenv
 import os
 import requests
 import time
+from tools.phishing_analyser import heuristic_check, domain_age_check, redirect_check, calculate_risk
+from urllib.parse import urlparse
+from tools.virustotal import scan_url
 
 load_dotenv()
 api_key = os.getenv('VT_API_KEY')
@@ -240,6 +243,51 @@ def run_vt():
 
 
 
+
+def run_phishing():
+    url = phishing_input.get()
+
+    if not url:
+        return
+    phishing_output.delete('1.0', 'end')
+
+    def phishing_thread():
+        try:
+            domain = urlparse(url).netloc
+            heuristic_warnings = heuristic_check(url)
+            domain_warnings = domain_age_check(domain)
+            redirect_warnings = redirect_check(url)
+            vt_result = scan_url(url, api_key)
+            
+            risk, score, colour = calculate_risk(vt_result, heuristic_warnings, domain_warnings, redirect_warnings)
+
+            all_warnings = heuristic_warnings + domain_warnings + redirect_warnings
+
+            output = f'Risk Level: {risk} (Score: {score}/5\n\n)'
+
+            if all_warnings:
+                output +="Warnings:\n"
+
+                for warning in all_warnings:
+                    output += f" ! {warning}\n"
+
+            else:
+                output += "No warnings found"
+
+            app.after(0, lambda: phishing_output.insert('end', output))
+        except Exception as e:
+            app.after(0,lambda:phishing_output.insert('end',f'Error: {str(e)}\n'))
+
+    thread = threading.Thread(target=phishing_thread)
+    thread.daemon = True
+    thread.start()
+
+
+
+
+
+
+
 app = tk.CTk()
 app.title("Cyber Toolkit")
 app.geometry("900x600")
@@ -365,6 +413,22 @@ vt_output.grid(row = 3, column = 1, sticky='w')
 
 
 
+phishing_frame = tk.CTkFrame(main_panel)
+phishing_frame.grid(row=0, column=0, sticky='nsew')
+
+phishing_label = tk.CTkLabel(phishing_frame, text='Enter a URL...')
+phishing_label.grid(row=0,column=1,sticky='w')
+
+phishing_input = tk.CTkEntry(phishing_frame, placeholder_text="Enter a URL")
+phishing_input.grid(row = 1, column =1, sticky = 'w')
+
+phishing_button = tk.CTkButton(phishing_frame, text='Check for phishing', command=lambda:run_phishing())
+phishing_button.grid(row =2, column =1, sticky = 'w')
+
+phishing_output = tk.CTkTextbox(phishing_frame)
+phishing_output.grid(row = 3, column=1,sticky='w')
+
+
 tools = [
     "Passwords",
     "Port Scanner",
@@ -382,7 +446,7 @@ tk.CTkButton(sidebar, text="Hashing", command=lambda: show_frame(hashing_frame))
 tk.CTkButton(sidebar, text="WHOIS", command=lambda: show_frame(whois_frame)).pack(pady=5, padx=10, fill="x")
 tk.CTkButton(sidebar, text="DNS", command=lambda: show_frame(dns_frame)).pack(pady=5, padx=10, fill="x")
 tk.CTkButton(sidebar, text="VirusTotal", command=lambda: show_frame(vt_frame)).pack(pady=5, padx=10, fill="x")
-tk.CTkButton(sidebar, text="Phishing", command=lambda: None).pack(pady=5, padx=10, fill="x")
+tk.CTkButton(sidebar, text="Phishing", command=lambda: show_frame(phishing_frame)).pack(pady=5, padx=10, fill="x")
 tk.CTkButton(sidebar, text="Log Parser", command=lambda: None).pack(pady=5, padx=10, fill="x")
 
 

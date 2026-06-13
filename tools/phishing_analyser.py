@@ -125,7 +125,7 @@ def calculate_risk(vt_results, heuristic_warnings, domain_warnings, redirect_war
     
     score = 0
     
-    if vt_results >0:
+    if vt_results and vt_results >0:
         score+=3
 
     score+=len(domain_warnings)
