@@ -2,6 +2,8 @@ import customtkinter as tk
 import hashlib
 import threading
 from tools.port_scanner import scan_port
+import whois
+import dns.resolver
 
 def show_frame(frame):
     frame.tkraise()
@@ -101,6 +103,74 @@ def run_scan_gui():
 
 
 
+def run_whois():
+    domain = whois_input.get()
+    if not domain:
+        return
+    
+    try:
+        result = whois.whois(domain)
+
+        date = result.creation_date
+        if isinstance(date, list):
+            date = date[0]
+
+        exp_date = result.expiration_date
+        if isinstance(exp_date, list):
+             exp_date = exp_date[0]
+
+
+        output=f"""Domain: {result.domain_name or 'N/A'}
+    Registrar: {result.registrar or 'N/A'}
+    Organisation: {result.org or 'N/A'}
+    Country: {result.country or 'N/A'}
+    Created: {date.strftime('%Y-%m-%d') if date else 'N/A'}
+    Expires: {exp_date.strftime('%Y-%m-%d') if exp_date else 'N/A'}
+    Name Servers: {', '.join(result.name_servers) if result.name_servers else 'N/A'}"""
+
+
+        whois_output.delete("1.0", "end")
+        whois_output.insert("1.0", output)
+
+        
+    except Exception:
+        whois_output.delete("1.0", "end")
+        whois_output.insert("1.0", "Error performing WHOIS lookup")
+
+
+
+
+def run_dns():
+    domain = dns_input.get()
+    record_type = dns_type.get()
+
+    if not domain:
+        return
+    
+    dns_output.delete("1.0", "end")
+
+
+    def dns_thread():
+
+        types_to_check = ["A", "AAAA", "MX", "NS", "TXT", "CNAME"] if record_type == 'All' else [record_type]
+
+
+        for rtype in types_to_check:
+            try:
+                results = dns.resolver.resolve(domain, rtype)
+                for result in results:
+                    app.after(0, lambda r=result, t=rtype: dns_output.insert("end", f"{t}: {r.to_text()}\n"))
+
+            except dns.resolver.NoAnswer:
+                app.after(0, lambda t=rtype: dns_output.insert("end", f"{t}: No records found\n"))
+
+            except dns.resolver.NXDOMAIN:
+                app.after(0, lambda: dns_output.insert("end", "Domain does not exist\n"))
+                break
+
+    thread = threading.Thread(target=dns_thread)
+    thread.daemon = True
+    thread.start()
 
 
 
@@ -170,6 +240,45 @@ scanner_output.grid(row = 5, column = 1, sticky = "w")
 
 
 
+
+whois_frame = tk.CTkFrame(main_panel)
+whois_frame.grid(row = 0, column = 0, sticky = "nsew")
+
+whois_input = tk.CTkEntry(whois_frame, width=400, placeholder_text="Enter a domain...")
+whois_input.grid(row = 1, column = 1, sticky = "w")
+
+whois_button = tk.CTkButton(whois_frame, text="WHOIS Lookup",command = lambda: run_whois())
+whois_button.grid(row = 2, column = 1, sticky = "w")
+
+whois_output = tk.CTkTextbox(whois_frame)
+whois_output.grid(row = 3, column = 1, sticky = "w")
+
+
+
+
+dns_frame =tk.CTkFrame(main_panel)
+dns_frame.grid(row = 0, column = 0, sticky = "nsew")
+
+
+dns_label = tk.CTkLabel(dns_frame, text="Enter the domain here...")
+dns_label.grid(row=0,column=1,sticky='w')
+
+
+dns_input = tk.CTkEntry(dns_frame, width=400, placeholder_text="Enter a domain...")
+dns_input.grid(row=1, column=1, sticky='w')
+
+
+dns_type = tk.CTkSegmentedButton(dns_frame, values=["All", "A", "AAAA", "MX", "NS", "TXT", "CNAME"])
+dns_type.grid(row = 2, column = 1, sticky = 'w')
+
+dns_button = tk.CTkButton(dns_frame, text= "DNS Lookup", command = lambda: run_dns())
+dns_button.grid(row = 3, column = 1, sticky = 'w')
+
+
+dns_output = tk.CTkTextbox(dns_frame)
+dns_output.grid(row = 4, column = 1, sticky = 'w')
+
+
 tools = [
     "Passwords",
     "Port Scanner",
@@ -184,8 +293,8 @@ tools = [
 tk.CTkButton(sidebar, text="Passwords", command=lambda: None).pack(pady=5, padx=10, fill="x")
 tk.CTkButton(sidebar, text="Port Scanner", command=lambda: show_frame(scanner_frame)).pack(pady=5, padx=10, fill="x")
 tk.CTkButton(sidebar, text="Hashing", command=lambda: show_frame(hashing_frame)).pack(pady=5, padx=10, fill="x")
-tk.CTkButton(sidebar, text="WHOIS", command=lambda: None).pack(pady=5, padx=10, fill="x")
-tk.CTkButton(sidebar, text="DNS", command=lambda: None).pack(pady=5, padx=10, fill="x")
+tk.CTkButton(sidebar, text="WHOIS", command=lambda: show_frame(whois_frame)).pack(pady=5, padx=10, fill="x")
+tk.CTkButton(sidebar, text="DNS", command=lambda: show_frame(dns_frame)).pack(pady=5, padx=10, fill="x")
 tk.CTkButton(sidebar, text="VirusTotal", command=lambda: None).pack(pady=5, padx=10, fill="x")
 tk.CTkButton(sidebar, text="Phishing", command=lambda: None).pack(pady=5, padx=10, fill="x")
 tk.CTkButton(sidebar, text="Log Parser", command=lambda: None).pack(pady=5, padx=10, fill="x")
