@@ -4,6 +4,14 @@ import threading
 from tools.port_scanner import scan_port
 import whois
 import dns.resolver
+from dotenv import load_dotenv
+import os
+import requests
+import time
+
+load_dotenv()
+api_key = os.getenv('VT_API_KEY')
+
 
 def show_frame(frame):
     frame.tkraise()
@@ -174,6 +182,64 @@ def run_dns():
 
 
 
+
+def run_vt():
+
+    url = vt_input.get()
+
+    if not url:
+        return
+    vt_output.delete('1.0', 'end')
+
+
+    def vt_thread():
+        try:
+            headers = {'x-apikey': api_key}
+            response = requests.post(
+                'https://www.virustotal.com/api/v3/urls',
+                headers=headers,
+                data={'url':url}
+            )
+
+            if response.status_code != 200:
+                app.after(0,lambda: vt_output.insert('end', f'Error: {response.json()["error"]["message"]}\n'))
+                return
+            
+            analysis_id = response.json()['data']['id']
+
+            app.after(0, lambda: vt_output.insert('end', 'Analysing...\n'))
+
+            while True:
+                result = requests.get(
+                    f'https://www.virustotal.com/api/v3/analyses/{analysis_id}',
+                    headers=headers
+                )
+
+                status = result.json()['data']['attributes']['status']
+                if status == 'completed':
+                    break
+                time.sleep(2)
+
+            stats = result.json()['data']['attributes']['stats']
+            output = f"""Malicious: {stats['malicious']}
+            Suspicious: {stats['suspicious']}
+            Harmless: {stats['harmless']}
+            Undetected: {stats['undetected']}"""
+
+            app.after(0, lambda: vt_output.delete('1.0', 'end'))
+            app.after(0, lambda: vt_output.insert('end', output))
+                
+        except Exception as e:
+            app.after(0, lambda: vt_output.insert('end', f'Error: {str(e)}\n'))
+
+
+    thread = threading.Thread(target=vt_thread)
+    thread.daemon = True
+    thread.start()
+
+
+
+
 app = tk.CTk()
 app.title("Cyber Toolkit")
 app.geometry("900x600")
@@ -279,6 +345,26 @@ dns_output = tk.CTkTextbox(dns_frame)
 dns_output.grid(row = 4, column = 1, sticky = 'w')
 
 
+
+vt_frame = tk.CTkFrame(main_panel)
+vt_frame.grid(row = 0, column = 0, sticky = 'nsew')
+
+
+vt_label = tk.CTkLabel(vt_frame, text="Enter a URL to test..")
+vt_label.grid(row = 0, column = 1, sticky = 'nsew')
+
+
+vt_input = tk.CTkEntry(vt_frame, width = 400, placeholder_text="Enter URL")
+vt_input.grid(row = 1, column=1, sticky = 'nsew')
+
+vt_button = tk.CTkButton(vt_frame, text="Test URL", command =lambda:run_vt())
+vt_button.grid(row =2, column = 1, sticky = 'w' )
+
+vt_output = tk.CTkTextbox(vt_frame)
+vt_output.grid(row = 3, column = 1, sticky='w')
+
+
+
 tools = [
     "Passwords",
     "Port Scanner",
@@ -295,7 +381,7 @@ tk.CTkButton(sidebar, text="Port Scanner", command=lambda: show_frame(scanner_fr
 tk.CTkButton(sidebar, text="Hashing", command=lambda: show_frame(hashing_frame)).pack(pady=5, padx=10, fill="x")
 tk.CTkButton(sidebar, text="WHOIS", command=lambda: show_frame(whois_frame)).pack(pady=5, padx=10, fill="x")
 tk.CTkButton(sidebar, text="DNS", command=lambda: show_frame(dns_frame)).pack(pady=5, padx=10, fill="x")
-tk.CTkButton(sidebar, text="VirusTotal", command=lambda: None).pack(pady=5, padx=10, fill="x")
+tk.CTkButton(sidebar, text="VirusTotal", command=lambda: show_frame(vt_frame)).pack(pady=5, padx=10, fill="x")
 tk.CTkButton(sidebar, text="Phishing", command=lambda: None).pack(pady=5, padx=10, fill="x")
 tk.CTkButton(sidebar, text="Log Parser", command=lambda: None).pack(pady=5, padx=10, fill="x")
 
